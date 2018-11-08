@@ -1,7 +1,15 @@
-const { Response, Headers } = require('node-fetch');
 const mapKeys = require('lodash/mapKeys');
 const identity = require('lodash/identity');
 const FormData = require('form-data');
+
+// Don't load node-fetch if fetch is already defined globally (eg React Native)
+let Response = global.Response;
+let Headers = global.Headers;
+if (! Response || ! Headers) {
+  const nodeFetch = require('node-fetch');
+  Response = nodeFetch.Response;
+  Headers = nodeFetch.Headers;
+}
 
 /**
  * A Fetch WebAPI implementation based on the Axios client
